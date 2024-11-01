@@ -1,7 +1,10 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m80_esports/core/const_page.dart';
+import 'package:m80_esports/features/authPage/screens/signUp_page.dart';
+import 'package:pinput/pinput.dart';
 import '../../../core/globalVariables.dart';
 
 class LoginPage extends StatefulWidget {
@@ -12,6 +15,8 @@ class LoginPage extends StatefulWidget {
 }
 
 class _LoginPageState extends State<LoginPage> {
+  TextEditingController phoneNumberController = TextEditingController();
+  bool otpPage = false;
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -45,7 +50,14 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: h * 0.03),
                   Text('Login with Mobile number',style: textStyle(false)),
                   SizedBox(height: h * 0.03),
-                  TextFormField(
+                  otpPage
+                  ? const FractionallySizedBox(
+                    child: Pinput(
+                      length: 6,
+                    ),
+                  )
+                  : TextFormField(
+                    controller : phoneNumberController,
                     keyboardType: TextInputType.number,
                     inputFormatters: [
                       FilteringTextInputFormatter.digitsOnly,
@@ -73,56 +85,102 @@ class _LoginPageState extends State<LoginPage> {
                     ),
                   ),
                   SizedBox(height: h * 0.03),
-                  Container(
-                    width: w * 0.3,
-                      height: h * 0.05,
-                      decoration: BoxDecoration(
-                        color: ColorConst.buttons,
-                        borderRadius: BorderRadius.circular(w * 0.1)
-                      ),
-                      child: Center(child:Text('Send OTP',style: textStyle(false)))
+                  InkWell(
+                    onTap: () {
+                      if(phoneNumberController.text.isEmpty){
+                        toastMessage(
+                            context: context,
+                            label: 'Please enter your Mobile number!',
+                            isSuccess: false);
+                      } else{
+                         setState(() {
+                           otpPage = true;
+                         });
+                      }
+                    },
+                    child: Container(
+                      width: w * 0.3,
+                        height: h * 0.05,
+                        decoration: BoxDecoration(
+                          color: ColorConst.buttons,
+                          borderRadius: BorderRadius.circular(w * 0.1)
+                        ),
+                        child: Center(child:Text(otpPage ? 'Verify':'Send OTP',style: textStyle(false)))
+                    ),
                   ),
-                  SizedBox(height: h * 0.3),
-                  Text('Login with social accounts',style: textStyle(false)),
-                  SizedBox(height: h * 0.01),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                    children: [
-                      Container(
-                        height: w * 0.12,
-                        width: w * 0.18,
-                        padding: EdgeInsets.all(w * 0.02),
-                        decoration: BoxDecoration(
-                          color: ColorConst.backgroundColor,
-                            borderRadius: BorderRadius.circular(w * 0.03),
-                            border: Border.all(color: ColorConst.textColor)
-                        ),
-                        child: SvgPicture.asset(IconConst.googleLogo),
-                      ),
-                      Container(
-                        height: w * 0.12,
-                        width: w * 0.18,
-                        padding: EdgeInsets.all(w * 0.02),
-                        decoration: BoxDecoration(
-                          color: ColorConst.backgroundColor,
-                            borderRadius: BorderRadius.circular(w * 0.03),
-                            border: Border.all(color: ColorConst.textColor)
-                        ),
-                        child: SvgPicture.asset(IconConst.facebookLogo),
-                      ),
-                      Container(
-                        height: w * 0.12,
-                        width: w * 0.18,
-                        padding: EdgeInsets.all(w * 0.02),
-                        decoration: BoxDecoration(
-                          color: ColorConst.backgroundColor,
-                            borderRadius: BorderRadius.circular(w * 0.03),
-                            border: Border.all(color: ColorConst.textColor)
-                        ),
-                        child: SvgPicture.asset(IconConst.appleLogo,color: Colors.white,),
-                      ),
-                    ],
+                  const SizedBox(height: 20,),
+                  otpPage
+                  ? GestureDetector(
+                    onTap: () {
+                      setState(() {
+                        otpPage = false;
+                      });
+                    },
+                    child: Row(
+                      children: [
+                        Icon(CupertinoIcons.back,color: ColorConst.textColor,size: w * 0.04),
+                        const SizedBox(width: 10),
+                        Text('Go back',style: textStyle(false)),
+                      ],
+                    ),
                   )
+                  : const SizedBox(),
+                  SizedBox(height: h * 0.15),
+                  // Text('Login with social accounts',style: textStyle(false)),
+                  // SizedBox(height: h * 0.01),
+                  // Row(
+                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  //   children: [
+                  //     Container(
+                  //       height: w * 0.12,
+                  //       width: w * 0.18,
+                  //       padding: EdgeInsets.all(w * 0.02),
+                  //       decoration: BoxDecoration(
+                  //         color: ColorConst.backgroundColor,
+                  //           borderRadius: BorderRadius.circular(w * 0.03),
+                  //           border: Border.all(color: ColorConst.textColor)
+                  //       ),
+                  //       child: SvgPicture.asset(IconConst.googleLogo),
+                  //     ),
+                  //     Container(
+                  //       height: w * 0.12,
+                  //       width: w * 0.18,
+                  //       padding: EdgeInsets.all(w * 0.02),
+                  //       decoration: BoxDecoration(
+                  //         color: ColorConst.backgroundColor,
+                  //           borderRadius: BorderRadius.circular(w * 0.03),
+                  //           border: Border.all(color: ColorConst.textColor)
+                  //       ),
+                  //       child: SvgPicture.asset(IconConst.facebookLogo),
+                  //     ),
+                  //     Container(
+                  //       height: w * 0.12,
+                  //       width: w * 0.18,
+                  //       padding: EdgeInsets.all(w * 0.02),
+                  //       decoration: BoxDecoration(
+                  //         color: ColorConst.backgroundColor,
+                  //           borderRadius: BorderRadius.circular(w * 0.03),
+                  //           border: Border.all(color: ColorConst.textColor)
+                  //       ),
+                  //       child: SvgPicture.asset(IconConst.appleLogo,color: Colors.white,),
+                  //     ),
+                  //   ],
+                  // )
+                  const Divider(),
+                   Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      const Text('New to this app?',style: TextStyle(
+                       color: ColorConst.textColor,
+                      )),
+                      InkWell(
+                        onTap: () => Navigator.push(context, MaterialPageRoute(builder: (context) =>  const SignUpPage())),
+                        child: const Text('Sign Up',style:TextStyle(
+                          color: ColorConst.buttons,
+                          fontWeight: FontWeight.w600
+                        )))
+                    ],
+                  ),
                 ],
               ),
             ),

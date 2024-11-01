@@ -9,7 +9,7 @@ class ColorConst {
 
 }
 class ImageConst {
-  static const logo = 'assets/images/M80_LOGO.jpeg';
+  static const logo = 'assets/images/M80_logo.png';
 }
 class IconConst {
   static const googleLogo = 'assets/icons/google.svg';
