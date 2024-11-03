@@ -4,6 +4,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/features/authPage/screens/signUp_page.dart';
+import 'package:m80_esports/features/homePage/screens/home_page.dart';
 import 'package:pinput/pinput.dart';
 import '../../../core/globalVariables.dart';
 
@@ -16,7 +17,22 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneNumberController = TextEditingController();
+
   bool otpPage = false;
+  String? selectedCafe;
+  List cafe = [];
+
+  loginIn (BuildContext context) {
+    if(phoneNumberController.text.isEmpty){
+      toastMessage(context: context, label: 'Enter Phone Number!', isSuccess: false);
+    }else if(phoneNumberController.text != '0123456789'){
+      toastMessage(context: context, label: 'No user found!', isSuccess: false);
+    } else {
+      setState(() {
+        otpPage = true;
+      });
+    }
+  }
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -26,7 +42,6 @@ class _LoginPageState extends State<LoginPage> {
             floating: false,
             pinned: false,
             backgroundColor: ColorConst.secondaryColor ,
-            // title: Text('Login',style: textStyle(true)),
             stretch: true,
             centerTitle: true,
             expandedHeight: h * 0.2,
@@ -88,15 +103,69 @@ class _LoginPageState extends State<LoginPage> {
                   SizedBox(height: h * 0.03),
                   InkWell(
                     onTap: () {
-                      if(phoneNumberController.text.isEmpty){
-                        toastMessage(
+                      if(otpPage == false){
+                        loginIn(context);
+                      } else {
+                        showDialog(
+                            barrierDismissible: false,
                             context: context,
-                            label: 'Please enter your Mobile number!',
-                            isSuccess: false);
-                      } else{
-                         setState(() {
-                           otpPage = true;
-                         });
+                            builder: (context) {
+                              return AlertDialog(
+                                backgroundColor: ColorConst.backgroundColor,
+                                title: Text('Select a cafe',style: textStyle(true),),
+                                content: Container(
+                                  decoration: BoxDecoration(
+                                      border: Border.all(color: ColorConst.secondaryColor),
+                                      borderRadius: BorderRadius.circular(w * 0.03)
+                                  ),
+                                  width: w * 0.7,
+                                  child: DropdownButton(
+                                    dropdownColor: ColorConst.secondaryColor,
+                                    padding: EdgeInsets.symmetric(horizontal : w * 0.03),
+                                    hint: Text("Available Cafe",style: textStyle(false)),
+                                    icon: Icon(CupertinoIcons.chevron_down,size: w * 0.04,),
+                                    isExpanded: true,
+                                    underline: const SizedBox(),
+                                    style: textStyle(false),
+                                    value: selectedCafe,
+                                    items: gamingCafe.map((valueItem){
+                                      return DropdownMenuItem(
+                                        value: valueItem.keys.first,
+                                        child: Text(valueItem.keys.first),
+                                      );
+                                    }).toList(),
+                                    onChanged: (newValue) {
+                                      setState(() {
+                                        cafe = [];
+                                        selectedCafe = newValue.toString();
+                                        selectedCafe == gamingCafe[0].keys.first
+                                            ? cafe.add(gamingCafe[0]) : cafe.add(gamingCafe[1]);
+                                      });
+                                    },
+                                  ),
+                                ),
+                                actions: [
+                                  TextButton(
+                                      onPressed: () => Navigator.pop(context),
+                                      child: const Text('Cancel')
+                                  ),
+                                  TextButton(
+                                      onPressed: () {
+                                        if(selectedCafe == null){
+                                          toastMessage(
+                                              context: context,
+                                              label: 'Please select a cafe!',
+                                              isSuccess: false);
+                                        } else {
+                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                                        }
+                                      },
+                                      child: const Text('Ok')
+                                  ),
+                                ],
+                              );
+                            },);
+
                       }
                     },
                     child: Container(
@@ -127,46 +196,6 @@ class _LoginPageState extends State<LoginPage> {
                   )
                   : const SizedBox(),
                   SizedBox(height: h * 0.15),
-                  // Text('Login with social accounts',style: textStyle(false)),
-                  // SizedBox(height: h * 0.01),
-                  // Row(
-                  //   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                  //   children: [
-                  //     Container(
-                  //       height: w * 0.12,
-                  //       width: w * 0.18,
-                  //       padding: EdgeInsets.all(w * 0.02),
-                  //       decoration: BoxDecoration(
-                  //         color: ColorConst.backgroundColor,
-                  //           borderRadius: BorderRadius.circular(w * 0.03),
-                  //           border: Border.all(color: ColorConst.textColor)
-                  //       ),
-                  //       child: SvgPicture.asset(IconConst.googleLogo),
-                  //     ),
-                  //     Container(
-                  //       height: w * 0.12,
-                  //       width: w * 0.18,
-                  //       padding: EdgeInsets.all(w * 0.02),
-                  //       decoration: BoxDecoration(
-                  //         color: ColorConst.backgroundColor,
-                  //           borderRadius: BorderRadius.circular(w * 0.03),
-                  //           border: Border.all(color: ColorConst.textColor)
-                  //       ),
-                  //       child: SvgPicture.asset(IconConst.facebookLogo),
-                  //     ),
-                  //     Container(
-                  //       height: w * 0.12,
-                  //       width: w * 0.18,
-                  //       padding: EdgeInsets.all(w * 0.02),
-                  //       decoration: BoxDecoration(
-                  //         color: ColorConst.backgroundColor,
-                  //           borderRadius: BorderRadius.circular(w * 0.03),
-                  //           border: Border.all(color: ColorConst.textColor)
-                  //       ),
-                  //       child: SvgPicture.asset(IconConst.appleLogo,color: Colors.white,),
-                  //     ),
-                  //   ],
-                  // )
                   const Divider(),
                    Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
