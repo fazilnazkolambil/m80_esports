@@ -25,7 +25,7 @@ class _LoginPageState extends State<LoginPage> {
           SliverAppBar(
             floating: false,
             pinned: false,
-            backgroundColor: ColorConst.buttons,
+            backgroundColor: ColorConst.secondaryColor ,
             // title: Text('Login',style: textStyle(true)),
             stretch: true,
             centerTitle: true,
@@ -53,7 +53,8 @@ class _LoginPageState extends State<LoginPage> {
                   otpPage
                   ? const FractionallySizedBox(
                     child: Pinput(
-                      length: 6,
+                      length: 4,
+                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                     ),
                   )
                   : TextFormField(

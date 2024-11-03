@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
+import 'package:m80_esports/features/homePage/screens/home_page.dart';
 import '../../../core/const_page.dart';
 import '../../../core/globalVariables.dart';
 
@@ -12,11 +13,8 @@ class SignUpPage extends StatefulWidget{
 }
 class _SignUpPageState extends State <SignUpPage>{
   TextEditingController phoneNumberController = TextEditingController();
-  TextEditingController emailController = TextEditingController();
-  TextEditingController organisationController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
-  List organisations = ['M80'];
-  String? organisation;
   @override
   Widget build(BuildContext context){
     return Scaffold(
@@ -25,7 +23,7 @@ class _SignUpPageState extends State <SignUpPage>{
             SliverAppBar(
               floating: false,
               pinned: false,
-              backgroundColor: ColorConst.buttons,
+              backgroundColor: ColorConst.secondaryColor,
               stretch: true,
               centerTitle: true,
               expandedHeight: h * 0.2,
@@ -48,11 +46,11 @@ class _SignUpPageState extends State <SignUpPage>{
                     Center(child: Image(image: const AssetImage(ImageConst.logo),height: h * 0.3)),
                     SizedBox(height: h * 0.03),
                     TextFormField(
-                      controller : emailController,
+                      controller : nameController,
                       keyboardType: TextInputType.emailAddress,
                       style: textStyle(false),
                       decoration: InputDecoration(
-                        hintText: 'Enter your Email address',
+                        hintText: 'Enter your name',
                         border: OutlineInputBorder(
                           borderRadius: BorderRadius.circular(w * 0.03),
                         ),
@@ -64,36 +62,6 @@ class _SignUpPageState extends State <SignUpPage>{
                             borderRadius: BorderRadius.circular(w * 0.03),
                             borderSide: const BorderSide(color: ColorConst.textColor)
                         ),
-                      ),
-                    ),
-                    SizedBox(height: h *0.01),
-                    Container(
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(w * 0.03),
-                        border: Border.all(color: ColorConst.textColor)
-                      ),
-                      child: DropdownButton(
-                        padding: EdgeInsets.symmetric(horizontal: w * 0.03),
-                        hint: Text("Organisation",style: TextStyle(
-                            fontSize: w * 0.03,
-                            color: ColorConst.textColor.withOpacity(0.5)
-                        )),
-                        icon: const Icon(Icons.arrow_drop_down),
-                        isExpanded: true,
-                        underline: const SizedBox(),
-                        style: textStyle(false),
-                        value: organisation,
-                        items: organisations.map((valueItem){
-                          return DropdownMenuItem(
-                            value: valueItem,
-                            child: Text(valueItem),
-                          );
-                        }).toList(),
-                        onChanged: (newValue) {
-                          setState(() {
-                            organisation = newValue.toString();
-                          });
-                        },
                       ),
                     ),
                     SizedBox(height: h *0.01),
@@ -128,7 +96,20 @@ class _SignUpPageState extends State <SignUpPage>{
                     SizedBox(height: h *0.01),
                     InkWell(
                       onTap: () {
-
+                        if(nameController.text.isEmpty){
+                          toastMessage(
+                              context: context,
+                              label: 'Please enter your name!',
+                              isSuccess: false);
+                        }else if(phoneNumberController.text.isEmpty){
+                          toastMessage(
+                              context: context,
+                              label: 'Please enter your Mobile number!',
+                              isSuccess: false);
+                        }else{
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          toastMessage(context: context, label: 'Logged in successfully!', isSuccess: true);
+                        }
                       },
                       child: Container(
                           width: w * 0.3,
@@ -151,7 +132,7 @@ class _SignUpPageState extends State <SignUpPage>{
                         ],
                       ),
                     ),
-                    SizedBox(height: h * 0.1,)
+                    SizedBox(height: h * 0.2,)
                   ],
                 ),
               ),

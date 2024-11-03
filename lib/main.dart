@@ -29,7 +29,7 @@ class MyApp extends StatelessWidget {
           // textTheme:  GoogleFonts.orbitronTextTheme(),
           useMaterial3: true,
         ),
-        home: const LoginPage(),
+        home: const HomePage(),
       ),
     );
   }
