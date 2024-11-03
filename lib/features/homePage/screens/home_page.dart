@@ -1,138 +1,108 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/core/globalVariables.dart';
+import 'package:m80_esports/features/authPage/screens/login_page.dart';
 
 class HomePage extends StatefulWidget{
-  const HomePage({super.key});
+  final List cafe;
+  final String selectedCafe;
+  const HomePage({super.key,
+    required this.cafe,
+    required this.selectedCafe
+  });
   @override
   State <HomePage> createState () => _HomePageState();
 }
 class _HomePageState extends State <HomePage>{
-
-  String? selectedCafe;
-  List cafe = [];
-
-
   @override
   Widget build (BuildContext context){
-
     return DefaultTabController(
-      length: selectedCafe != null ? cafe[0][selectedCafe].length : 0,
+      length: widget.cafe[0][widget.selectedCafe].length,
       child: Scaffold(
         body: CustomScrollView(
           slivers: [
             SliverAppBar(
               leading: const SizedBox(),
-              floating: false,
-              pinned: false,
+              floating: true,
               backgroundColor: ColorConst.backgroundColor,
-              stretch: true,
+              // stretch: true,
               centerTitle: true,
               expandedHeight: h * 0.05,
               flexibleSpace: FlexibleSpaceBar(
-                background: Center(child: Text('Gaming Setups',style: textStyle(true))),
+                background: Center(child: Padding(
+                  padding: const EdgeInsets.only(top : 50),
+                  child: Text('Cafe : ${widget.selectedCafe}',style: textStyle(true)),
+                )),
               ),
-            ),
-            SliverAppBar(
-              leading: const SizedBox(),
-              floating: true,
-              pinned: false,
-              backgroundColor: ColorConst.backgroundColor,
-              stretch: true,
-              centerTitle: true,
-              expandedHeight: h * 0.05,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Container(
-                    decoration: BoxDecoration(
-                        border: Border.all(color: ColorConst.secondaryColor),
-                        borderRadius: BorderRadius.circular(w * 0.03)
-                    ),
-                    width: w * 0.7,
-                    child: DropdownButton(
-                      dropdownColor: ColorConst.secondaryColor,
-                      padding: EdgeInsets.symmetric(horizontal : w * 0.03),
-                      hint: Text("Select Cafe",style: textStyle(false)),
-                      icon: Icon(CupertinoIcons.chevron_down,size: w * 0.04,),
-                      isExpanded: true,
-                      underline: const SizedBox(),
-                      style: textStyle(false),
-                      value: selectedCafe,
-                      items: gamingCafe.map((valueItem){
-                        return DropdownMenuItem(
-                          value: valueItem.keys.first,
-                          child: Text(valueItem.keys.first),
+              actions: [
+                Padding(
+                  padding: EdgeInsets.all(w * 0.03),
+                  child: InkWell(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                        return AlertDialog(
+                          backgroundColor: ColorConst.backgroundColor,
+                          title: Text('Logout',style: textStyle(true),),
+                          content: Text('Are you sure you want to logout?',style: textStyle(false),),
+                          actions: [
+                            TextButton(
+                                onPressed: () => Navigator.pop(context),
+                                child: const Text('No')
+                            ),
+                            TextButton(
+                                onPressed: () async {
+                                  // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                  // prefs.setBool('isLoggedIn', false);
+                                  // prefs.remove('selectedCafe');
+                                  // prefs.remove('cafe');
+                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),(route) => false);
+                                },
+                                child: const Text('Yes')
+                            )
+                          ],
                         );
-                      }).toList(),
-                      onChanged: (newValue) {
-                        setState(() {
-                          cafe = [];
-                          selectedCafe = newValue.toString();
-                          selectedCafe == gamingCafe[0].keys.first
-                              ? cafe.add(gamingCafe[0]) : cafe.add(gamingCafe[1]);
-                        });
-                      },
-                    ),
-                  ),
-                  selectedCafe != null
-                      ? TextButton(
-                      onPressed: () {
-                        selectedCafe = null;
-                        setState(() {
+                      },);
 
-                        });
-                      },
-                      child: const Text('Clear',style: TextStyle(
-                          color: ColorConst.buttons,
-                          fontWeight: FontWeight.w600
-                      ))
-                  )
-                      : const SizedBox()
-                ],
-              ),
-
+                    },
+                      child: const Icon(Icons.logout_outlined,color: ColorConst.textColor)),
+                )
+              ],
             ),
-            selectedCafe != null ?
             SliverAppBar(
-              leading: const SizedBox(),
-              floating: true,
               pinned: true,
               backgroundColor: ColorConst.backgroundColor,
-              expandedHeight: h * 0.05,
-              bottom: TabBar(
+              leadingWidth: w,
+              leading: TabBar(
                 dividerColor: ColorConst.backgroundColor,
                 isScrollable: true,
                 tabAlignment: TabAlignment.start,
-                indicatorPadding: const EdgeInsets.all(- 10),
+                //indicatorPadding: const EdgeInsets.all(- 10),
                 overlayColor: const WidgetStatePropertyAll(ColorConst.backgroundColor),
                 indicator: BoxDecoration(
                   color: ColorConst.secondaryColor,
                   border: Border.all(color: ColorConst.textColor.withOpacity(0.5)),
                   borderRadius: BorderRadius.circular(w * 0.03)
                 ),
-                  tabs: List.generate(cafe[0][selectedCafe].length, (index) {
+                  tabs: List.generate(widget.cafe[0][widget.selectedCafe].length, (index) {
                 return Padding(
-                  padding:  EdgeInsets.symmetric(horizontal: w * 0.05),
-                  child: Text(cafe[0][selectedCafe][index].keys.first,style: textStyle(false)),
+                  padding:  EdgeInsets.symmetric(horizontal: w * 0.05,vertical: w * 0.01),
+                  child: Text(widget.cafe[0][widget.selectedCafe][index].keys.first,style: textStyle(false)),
                 );
               })),
-            )
-                :const SliverAppBar(
-              leading: SizedBox(),
-              backgroundColor: ColorConst.backgroundColor,
+              centerTitle: true,
             ),
             SliverFillRemaining(
               child: Padding(
                 padding: EdgeInsets.all(w * 0.03),
-                child: selectedCafe != null
-                    ? Column(
+                child: Column(
                   children: [
                     Expanded(
                       child: TabBarView(
-                          children: List.generate(cafe[0][selectedCafe].length, (i) {
-                            List setups = cafe[0][selectedCafe][i][cafe[0][selectedCafe][i].keys.first];
+                          children: List.generate(widget.cafe[0][widget.selectedCafe].length, (i) {
+                            List setups = widget.cafe[0][widget.selectedCafe][i][widget.cafe[0][widget.selectedCafe][i].keys.first];
                             return ListView.separated(
                                 itemBuilder: (context, index) {
                                   return Container(
@@ -205,7 +175,6 @@ class _HomePageState extends State <HomePage>{
                     )
                   ],
                 )
-                    : Center(child:Text('No cafe selected!',style: textStyle(false)))
               ),
             )
             ],

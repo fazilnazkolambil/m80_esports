@@ -1,7 +1,8 @@
+import 'dart:convert';
+
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/features/authPage/screens/signUp_page.dart';
 import 'package:m80_esports/features/homePage/screens/home_page.dart';
@@ -39,6 +40,7 @@ class _LoginPageState extends State<LoginPage> {
       body: CustomScrollView(
         slivers: [
           SliverAppBar(
+            leading: const SizedBox(),
             floating: false,
             pinned: false,
             backgroundColor: ColorConst.secondaryColor ,
@@ -110,59 +112,73 @@ class _LoginPageState extends State<LoginPage> {
                             barrierDismissible: false,
                             context: context,
                             builder: (context) {
-                              return AlertDialog(
-                                backgroundColor: ColorConst.backgroundColor,
-                                title: Text('Select a cafe',style: textStyle(true),),
-                                content: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(color: ColorConst.secondaryColor),
-                                      borderRadius: BorderRadius.circular(w * 0.03)
-                                  ),
-                                  width: w * 0.7,
-                                  child: DropdownButton(
-                                    dropdownColor: ColorConst.secondaryColor,
-                                    padding: EdgeInsets.symmetric(horizontal : w * 0.03),
-                                    hint: Text("Available Cafe",style: textStyle(false)),
-                                    icon: Icon(CupertinoIcons.chevron_down,size: w * 0.04,),
-                                    isExpanded: true,
-                                    underline: const SizedBox(),
-                                    style: textStyle(false),
-                                    value: selectedCafe,
-                                    items: gamingCafe.map((valueItem){
-                                      return DropdownMenuItem(
-                                        value: valueItem.keys.first,
-                                        child: Text(valueItem.keys.first),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        cafe = [];
-                                        selectedCafe = newValue.toString();
-                                        selectedCafe == gamingCafe[0].keys.first
-                                            ? cafe.add(gamingCafe[0]) : cafe.add(gamingCafe[1]);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Cancel')
-                                  ),
-                                  TextButton(
-                                      onPressed: () {
-                                        if(selectedCafe == null){
-                                          toastMessage(
-                                              context: context,
-                                              label: 'Please select a cafe!',
-                                              isSuccess: false);
-                                        } else {
-                                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
-                                        }
-                                      },
-                                      child: const Text('Ok')
-                                  ),
-                                ],
+                              return StatefulBuilder(
+                                builder: (context, setState) {
+                                  return AlertDialog(
+                                    backgroundColor: ColorConst.backgroundColor,
+                                    title: Text('Select a cafe',style: textStyle(true),),
+                                    content: Container(
+                                      decoration: BoxDecoration(
+                                          border: Border.all(color: ColorConst.secondaryColor),
+                                          borderRadius: BorderRadius.circular(w * 0.03)
+                                      ),
+                                      width: w * 0.7,
+                                      child: DropdownButton(
+                                        dropdownColor: ColorConst.secondaryColor,
+                                        padding: EdgeInsets.symmetric(horizontal : w * 0.03),
+                                        hint: Text("Available Cafes",style: textStyle(false)),
+                                        icon: Icon(CupertinoIcons.chevron_down,size: w * 0.04,),
+                                        isExpanded: true,
+                                        underline: const SizedBox(),
+                                        style: textStyle(false),
+                                        value: selectedCafe,
+                                        items: gamingCafe.map((valueItem){
+                                          return DropdownMenuItem(
+                                            value: valueItem.keys.first,
+                                            child: Text(valueItem.keys.first),
+                                          );
+                                        }).toList(),
+                                        onChanged: (newValue) {
+                                          setState(() {
+                                            cafe = [];
+                                            selectedCafe = newValue.toString();
+                                            selectedCafe == gamingCafe[0].keys.first
+                                                ? cafe.add(gamingCafe[0]) : cafe.add(gamingCafe[1]);
+                                          });
+                                        },
+                                      ),
+                                    ),
+                                    actions: [
+                                      TextButton(
+                                          onPressed: () => Navigator.pop(context),
+                                          child: const Text('Cancel')
+                                      ),
+                                      TextButton(
+                                          onPressed: () async {
+                                            if(selectedCafe == null){
+                                              toastMessage(
+                                                  context: context,
+                                                  label: 'Please select a cafe!',
+                                                  isSuccess: false);
+                                            } else {
+                                              // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                              // prefs.setBool('isLoggedIn', true);
+                                              // prefs.setString('selectedCafe', selectedCafe.toString());
+                                              // String jsonString = jsonEncode(cafe);
+                                              // prefs.setString('cafe', jsonString);
+                                              toastMessage(context: context, label: 'Logged in Successfully!', isSuccess: true);
+                                              Navigator.push(context, MaterialPageRoute(
+                                                  builder: (context) => HomePage(
+                                                    cafe: cafe,
+                                                    selectedCafe: selectedCafe.toString(),
+                                                  )));
+                                            }
+                                          },
+                                          child: const Text('Ok')
+                                      ),
+                                    ],
+                                  );
+                                },
                               );
                             },);
 

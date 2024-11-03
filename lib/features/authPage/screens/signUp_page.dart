@@ -107,7 +107,7 @@ class _SignUpPageState extends State <SignUpPage>{
                               label: 'Please enter your Mobile number!',
                               isSuccess: false);
                         }else{
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
+                          //Navigator.push(context, MaterialPageRoute(builder: (context) => const HomePage()));
                           toastMessage(context: context, label: 'Logged in successfully!', isSuccess: true);
                         }
                       },

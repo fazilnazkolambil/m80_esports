@@ -74,7 +74,7 @@ List gamingCafe = [
   {
     'Bell Road' : [
       {
-        'PC' : [
+        'PC Gaming' : [
           {'name' : 'PC 1', 'price' : 120},
           {'name' : 'PC 2', 'price' : 120},
           {'name' : 'PC 3', 'price' : 120},
