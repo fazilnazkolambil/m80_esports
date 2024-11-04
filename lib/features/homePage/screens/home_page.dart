@@ -38,8 +38,8 @@ class _HomePageState extends State <HomePage>{
                   title: Text('UserName',style:textStyle(true)),
                   subtitle: Text(widget.selectedCafe,style: textStyle(false),),
                 ),
+                Text('Income',style: textStyle(true)),
                 Text('Bookings',style: textStyle(true)),
-                Text('Earning',style: textStyle(true)),
                 Text('Attendance/Presence',style: textStyle(true)),
                 Text('Directory',style: textStyle(true)),
                 Text('Settings',style: textStyle(true)),
@@ -137,6 +137,7 @@ class _HomePageState extends State <HomePage>{
               pinned: true,
               backgroundColor: ColorConst.backgroundColor,
               leadingWidth: w,
+              foregroundColor: Colors.green,
               leading: TabBar(
                 dividerColor: ColorConst.backgroundColor,
                 isScrollable: true,
@@ -151,7 +152,7 @@ class _HomePageState extends State <HomePage>{
                   tabs: List.generate(widget.cafe[0][widget.selectedCafe].length, (index) {
                 return Padding(
                   padding:  EdgeInsets.symmetric(horizontal: w * 0.05,vertical: w * 0.01),
-                  child: Text(widget.cafe[0][widget.selectedCafe][index].keys.first,style: textStyle(false)),
+                  child: Text(widget.cafe[0][widget.selectedCafe][index].keys.first,style: textStyle(true)),
                 );
               })),
               centerTitle: true,
@@ -173,7 +174,7 @@ class _HomePageState extends State <HomePage>{
                                     height: h * 0.2,
                                     width: w,
                                     padding: EdgeInsets.all(w * 0.03),
-                                    margin: EdgeInsets.symmetric(horizontal : w * 0.03),
+                                    margin: EdgeInsets.only(left : w * 0.01,right : w * 0.01,bottom: h * 0.02),
                                     decoration: BoxDecoration(
                                       color: ColorConst.secondaryColor,
                                         borderRadius: BorderRadius.circular(w * 0.03),
@@ -181,10 +182,6 @@ class _HomePageState extends State <HomePage>{
                                             ? ColorConst.errorAlert
                                             : ColorConst.textColor.withOpacity(0.5)
                                         ),
-                                        // gradient: LinearGradient(colors: [
-                                        //   ColorConst.buttons,
-                                        //   ColorConst.secondaryColor
-                                        // ])
                                     ),
                                     child: Row(
                                       mainAxisAlignment: MainAxisAlignment.spaceEvenly,
