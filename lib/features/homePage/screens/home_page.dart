@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/core/globalVariables.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
@@ -14,18 +15,102 @@ class HomePage extends StatefulWidget{
   State <HomePage> createState () => _HomePageState();
 }
 class _HomePageState extends State <HomePage>{
+  final ScrollController _scrollController = ScrollController();
   @override
   Widget build (BuildContext context){
     return DefaultTabController(
       length: widget.cafe[0][widget.selectedCafe].length,
       child: Scaffold(
+        drawer: Drawer(
+          backgroundColor: ColorConst.secondaryColor,
+          width: w * 0.7,
+          child: Padding(
+            padding: EdgeInsets.symmetric(vertical: h * 0.03,horizontal: w * 0.03),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+              children: [
+                ListTile(
+                  leading: CircleAvatar(
+                    backgroundImage: const AssetImage(ImageConst.logo),
+                    radius: w * 0.07,
+                  ),
+                  title: Text('UserName',style:textStyle(true)),
+                  subtitle: Text(widget.selectedCafe,style: textStyle(false),),
+                ),
+                Text('Bookings',style: textStyle(true)),
+                Text('Earning',style: textStyle(true)),
+                Text('Attendance/Presence',style: textStyle(true)),
+                Text('Directory',style: textStyle(true)),
+                Text('Settings',style: textStyle(true)),
+                const SizedBox(),
+                GestureDetector(
+                    onTap: () {
+                      showDialog(
+                        context: context,
+                        barrierDismissible: false,
+                        builder: (context) {
+                          return AlertDialog(
+                            backgroundColor: ColorConst.backgroundColor,
+                            title: Text('Logout',style: textStyle(true),),
+                            content: Text('Are you sure you want to logout?',style: textStyle(false),),
+                            actions: [
+                              TextButton(
+                                  onPressed: () => Navigator.pop(context),
+                                  child: const Text('No')
+                              ),
+                              TextButton(
+                                  onPressed: () async {
+                                    // SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    // prefs.setBool('isLoggedIn', false);
+                                    // prefs.remove('selectedCafe');
+                                    // prefs.remove('cafe');
+                                    Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),(route) => false);
+                                  },
+                                  child: const Text('Yes')
+                              )
+                            ],
+                          );
+                        },);
+
+                    },
+                    child: Row(
+                      children: [
+                        const Icon(Icons.logout_outlined,color: ColorConst.textColor),
+                        const SizedBox(width: 10,),
+                        Text('Sign out',style: textStyle(false)),
+                      ],
+                    )),
+                Center(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.center,
+                    children: [
+                      Text('M80 Esports',style: textStyle(true)),
+                      Text('App version : $version',style:textStyle(false))
+                    ],
+                  ),
+                )
+              ],
+            ),
+          ),
+        ),
         body: CustomScrollView(
+          controller: _scrollController,
           slivers: [
             SliverAppBar(
-              leading: const SizedBox(),
+              leading: Builder(
+                builder: (context) {
+                  return IconButton(
+                      onPressed: () {
+                        Scaffold.of(context).openDrawer();
+                      },
+                      icon: const Icon(Icons.menu,color: ColorConst.textColor,)
+                  );
+                }
+              ),
               floating: true,
               backgroundColor: ColorConst.backgroundColor,
-              // stretch: true,
+              surfaceTintColor: Colors.green,
               centerTitle: true,
               expandedHeight: h * 0.05,
               flexibleSpace: FlexibleSpaceBar(
@@ -36,38 +121,15 @@ class _HomePageState extends State <HomePage>{
               ),
               actions: [
                 Padding(
-                  padding: EdgeInsets.all(w * 0.03),
-                  child: InkWell(
-                    onTap: () {
-                      showDialog(
-                        context: context,
-                        barrierDismissible: false,
-                        builder: (context) {
-                        return AlertDialog(
-                          backgroundColor: ColorConst.backgroundColor,
-                          title: Text('Logout',style: textStyle(true),),
-                          content: Text('Are you sure you want to logout?',style: textStyle(false),),
-                          actions: [
-                            TextButton(
-                                onPressed: () => Navigator.pop(context),
-                                child: const Text('No')
-                            ),
-                            TextButton(
-                                onPressed: () async {
-                                  // SharedPreferences prefs = await SharedPreferences.getInstance();
-                                  // prefs.setBool('isLoggedIn', false);
-                                  // prefs.remove('selectedCafe');
-                                  // prefs.remove('cafe');
-                                  Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),(route) => false);
-                                },
-                                child: const Text('Yes')
-                            )
-                          ],
-                        );
-                      },);
-
-                    },
-                      child: const Icon(Icons.logout_outlined,color: ColorConst.textColor)),
+                  padding: EdgeInsets.symmetric(horizontal: w * 0.03),
+                  child: const Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Icon(Icons.notifications_outlined,color: ColorConst.textColor,),
+                      SizedBox(width: 10),
+                      Icon(Icons.account_balance_wallet_outlined,color: ColorConst.textColor,)
+                    ],
+                  ),
                 )
               ],
             ),
@@ -104,40 +166,71 @@ class _HomePageState extends State <HomePage>{
                           children: List.generate(widget.cafe[0][widget.selectedCafe].length, (i) {
                             List setups = widget.cafe[0][widget.selectedCafe][i][widget.cafe[0][widget.selectedCafe][i].keys.first];
                             return ListView.separated(
+                              controller: _scrollController,
+                              physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return Container(
                                     height: h * 0.2,
                                     width: w,
                                     padding: EdgeInsets.all(w * 0.03),
-                                    margin: EdgeInsets.all(w * 0.03),
+                                    margin: EdgeInsets.symmetric(horizontal : w * 0.03),
                                     decoration: BoxDecoration(
                                       color: ColorConst.secondaryColor,
                                         borderRadius: BorderRadius.circular(w * 0.03),
-                                        border: Border.all(color: ColorConst.textColor.withOpacity(0.5)),
+                                        border: Border.all(color:setups[index]['status']
+                                            ? ColorConst.errorAlert
+                                            : ColorConst.textColor.withOpacity(0.5)
+                                        ),
                                         // gradient: LinearGradient(colors: [
                                         //   ColorConst.buttons,
                                         //   ColorConst.secondaryColor
                                         // ])
                                     ),
                                     child: Row(
-                                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                                      mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                       children: [
-                                        Image(image: AssetImage(ImageConst.logo),width: w * 0.3),
+                                        Image(image: const AssetImage(ImageConst.logo),width: w * 0.3),
                                         Column(
                                           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                                           children: [
                                             Text(setups[index]['name'],style: textStyle(true)),
-                                            Row(
+                                            setups[index]['status']
+                                            ? Expanded(
+                                              child: Column(
+                                                mainAxisAlignment : MainAxisAlignment.spaceEvenly,
+                                                crossAxisAlignment: CrossAxisAlignment.start,
+                                                children: [
+                                                  Text('Start time : ${DateFormat.jm().format(DateTime.now())}',style: textStyle(false)),
+                                                  Text('Play time : 1:30 hrs',style: textStyle(false),),
+                                                  Text('Total Amount : 150/-',style: textStyle(false)),
+                                                  Container(
+                                                    height: h * 0.035,
+                                                    width: w * 0.2,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(w * 0.04),
+                                                        color: ColorConst.errorAlert
+                                                    ),
+                                                    child: Center(child:Text('End',style : textStyle(false))),
+                                                  )
+                                                ],
+                                              ),
+                                            )
+                                            : Row(
                                               mainAxisAlignment: MainAxisAlignment.spaceBetween,
                                               children: [
-                                                Container(
-                                                  height: h * 0.035,
-                                                  width: w * 0.2,
-                                                  decoration: BoxDecoration(
-                                                      borderRadius: BorderRadius.circular(w * 0.04),
-                                                      color: ColorConst.buttons
+                                                InkWell(
+                                                  onTap : (){
+
+                                                  },
+                                                  child: Container(
+                                                    height: h * 0.035,
+                                                    width: w * 0.2,
+                                                    decoration: BoxDecoration(
+                                                        borderRadius: BorderRadius.circular(w * 0.04),
+                                                        color: ColorConst.buttons
+                                                    ),
+                                                    child: Center(child:Text('Start',style : textStyle(false))),
                                                   ),
-                                                  child: Center(child:Text('Start',style : textStyle(false))),
                                                 ),
                                                 SizedBox(width: w * 0.04,),
                                                 InkWell(
