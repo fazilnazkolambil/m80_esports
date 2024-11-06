@@ -1,8 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:m80_esports/features/authPage/screens/login_page.dart';
-import 'package:m80_esports/features/homePage/screens/home_page.dart';
 import '../../../core/const_page.dart';
 import '../../../core/globalVariables.dart';
 
