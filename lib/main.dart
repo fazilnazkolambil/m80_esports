@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
-import 'package:m80_esports/features/authPage/splash_screen.dart';
-// import 'package:google_fonts/google_fonts.dart';
+import 'package:m80_esports/features/authPage/screens/splash_screen.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'core/globalVariables.dart';
 
 void main() {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           colorScheme: ColorScheme.fromSeed(seedColor: Colors.deepPurple),
           scaffoldBackgroundColor: ColorConst.backgroundColor,
-          // textTheme:  GoogleFonts.orbitronTextTheme(),
+          textTheme:  GoogleFonts.orbitronTextTheme(),
           useMaterial3: true,
         ),
         home: const SplashScreen(),

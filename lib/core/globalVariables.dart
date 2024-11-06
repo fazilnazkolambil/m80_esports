@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
+import 'package:motion_toast/motion_toast.dart';
 
 String version = '1.0.0';
 var w;
@@ -20,12 +21,30 @@ toastMessage({
   required String label,
   required bool isSuccess,
 }){
-  ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-    content: Text(label),
-    backgroundColor: isSuccess ? ColorConst.successAlert : ColorConst.errorAlert,
-    duration: const Duration(seconds: 2),
-    shape: const OutlineInputBorder(),
-  ));
+  if(isSuccess == true){
+    MotionToast.success(
+        title: Text(
+          'Success !',
+        ),
+        enableAnimation: true,
+        position: MotionToastPosition.center,
+        description: Text(label)).show(context);
+  }else{
+    MotionToast.error(
+        title: Text(
+          'Error !',
+        ),
+        enableAnimation: true,
+        position: MotionToastPosition.center,
+        description: Text(label)).show(context);
+  }
+
+  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
+  //   content: Text(label),
+  //   backgroundColor: isSuccess ? ColorConst.successAlert : ColorConst.errorAlert,
+  //   duration: const Duration(seconds: 2),
+  //   shape: const OutlineInputBorder(),
+  // ));
 }
 
 /// GAMING CAFE

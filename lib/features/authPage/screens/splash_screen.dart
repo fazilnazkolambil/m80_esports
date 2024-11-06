@@ -1,10 +1,13 @@
 
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
 import 'package:m80_esports/features/homePage/screens/home_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/globalVariables.dart';
+import '../../../core/globalVariables.dart';
 
 
 class SplashScreen extends StatefulWidget{
@@ -16,18 +19,19 @@ class _SplashScreenState extends State <SplashScreen> {
   bool isLoggedIn = false;
   String? selectedCafe;
   List cafe = [];
-  // getDate () async {
-  //   SharedPreferences prefs = await SharedPreferences.getInstance();
-  //   isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-  //   selectedCafe = prefs.getString('selectedCafe');
-  //   String? jsonString = prefs.getString('cafe');
-  //   cafe = jsonDecode(jsonString!);
-  //   setState(() {
-  //
-  //   });
-  // }
+  getDate () async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
+    selectedCafe = prefs.getString('selectedCafe');
+    String? jsonString = prefs.getString('cafe');
+    cafe = jsonDecode(jsonString!);
+    setState(() {
+
+    });
+  }
   @override
   void initState() {
+    getDate();
     Future.delayed(
         const Duration(seconds: 2))
         .then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) => isLoggedIn

@@ -3,6 +3,7 @@ import 'package:intl/intl.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:m80_esports/core/globalVariables.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 class HomePage extends StatefulWidget{
   final List cafe;
@@ -61,10 +62,10 @@ class _HomePageState extends State <HomePage>{
                               ),
                               TextButton(
                                   onPressed: () async {
-                                    // SharedPreferences prefs = await SharedPreferences.getInstance();
-                                    // prefs.setBool('isLoggedIn', false);
-                                    // prefs.remove('selectedCafe');
-                                    // prefs.remove('cafe');
+                                    SharedPreferences prefs = await SharedPreferences.getInstance();
+                                    prefs.setBool('isLoggedIn', false);
+                                    prefs.remove('selectedCafe');
+                                    prefs.remove('cafe');
                                     Navigator.pushAndRemoveUntil(context, MaterialPageRoute(builder: (context) => const LoginPage()),(route) => false);
                                   },
                                   child: const Text('Yes')
