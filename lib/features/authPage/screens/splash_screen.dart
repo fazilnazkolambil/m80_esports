@@ -3,6 +3,7 @@ import 'dart:convert';
 
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
+import 'package:m80_esports/features/homePage/screens/cafeList_page.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
 import 'package:m80_esports/features/homePage/screens/home_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
@@ -22,9 +23,9 @@ class _SplashScreenState extends State <SplashScreen> {
   getDate () async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     isLoggedIn = prefs.getBool('isLoggedIn') ?? false;
-    selectedCafe = prefs.getString('selectedCafe');
-    String? jsonString = prefs.getString('cafe');
-    cafe = jsonDecode(jsonString!);
+    // selectedCafe = prefs.getString('selectedCafe');
+    // String? jsonString = prefs.getString('cafe');
+    // cafe = jsonDecode(jsonString!);
     setState(() {
 
     });
@@ -33,15 +34,15 @@ class _SplashScreenState extends State <SplashScreen> {
   void initState() {
     getDate();
     Future.delayed(
-        const Duration(seconds: 2))
+        const Duration(seconds: 3))
         .then((value) => Navigator.push(context, MaterialPageRoute(builder: (context) => isLoggedIn
-        ? HomePage(cafe: cafe, selectedCafe: selectedCafe.toString())
+        ? CafeList()
         : const LoginPage())));
     super.initState();
   }
   @override
   Widget build (BuildContext context){
-    return  Scaffold(
+    return  bgAnime(widget: Scaffold(
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.spaceEvenly,
@@ -51,6 +52,6 @@ class _SplashScreenState extends State <SplashScreen> {
           ],
         ),
       ),
-    );
+    ));
   }
 }

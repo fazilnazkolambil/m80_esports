@@ -1,3 +1,4 @@
+import 'package:animate_gradient/animate_gradient.dart';
 import 'package:flutter/material.dart';
 import 'package:m80_esports/core/const_page.dart';
 import 'package:motion_toast/motion_toast.dart';
@@ -5,6 +6,8 @@ import 'package:motion_toast/motion_toast.dart';
 String version = '1.0.0';
 var w;
 var h;
+String selectedCafe = '';
+List cafe = [];
 
 /// TEXT STYLE
 TextStyle textStyle (bool heading) {
@@ -26,6 +29,8 @@ toastMessage({
         title: Text(
           'Success !',
         ),
+        dismissable: true,
+        toastDuration: Duration(seconds: 1),
         enableAnimation: true,
         position: MotionToastPosition.center,
         description: Text(label)).show(context);
@@ -35,16 +40,28 @@ toastMessage({
           'Error !',
         ),
         enableAnimation: true,
+        toastDuration: Duration(seconds: 1),
         position: MotionToastPosition.center,
         description: Text(label)).show(context);
   }
+}
 
-  // ScaffoldMessenger.of(context).showSnackBar(SnackBar(
-  //   content: Text(label),
-  //   backgroundColor: isSuccess ? ColorConst.successAlert : ColorConst.errorAlert,
-  //   duration: const Duration(seconds: 2),
-  //   shape: const OutlineInputBorder(),
-  // ));
+/// BACKGROUND ANIMATION
+bgAnime ({
+  required Widget widget
+}) {
+  return AnimateGradient(
+      duration: Duration(seconds: 3),
+      primaryColors: [
+        Colors.red,
+        Colors.purple,
+      ],
+      secondaryColors: [
+        Colors.green,
+        Colors.blue,
+      ],
+      child: widget
+  );
 }
 
 /// GAMING CAFE

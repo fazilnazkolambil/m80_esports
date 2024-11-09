@@ -1,12 +1,12 @@
 import 'dart:ui';
 
 class ColorConst {
-  static const backgroundColor = Color(0xff09021e);
-  static const secondaryColor = Color(0xff0f062e);
-  static const textColor = Color(0xffc2c2c2);
-  static const buttons = Color(0xff002ec5);
-  static const errorAlert = Color(0xff780303);
-  static const successAlert = Color(0xff00FF88);
+  static const secondaryColor = Color(0xff000000);
+  static const backgroundColor = Color(0xff100632);
+  static const textColor = Color(0xff777777);
+  static const buttons = Color(0xff5c00bd);
+  static const errorAlert = Color(0xffbd0202);
+  static const successAlert = Color(0xff00ff3c);
   static const testColor = Color(0xff0070ac);
 
 }

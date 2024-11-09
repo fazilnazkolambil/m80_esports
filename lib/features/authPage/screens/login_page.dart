@@ -4,6 +4,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:m80_esports/core/const_page.dart';
+import 'package:m80_esports/features/homePage/screens/cafeList_page.dart';
 import 'package:m80_esports/features/authPage/screens/signUp_page.dart';
 import 'package:m80_esports/features/homePage/screens/home_page.dart';
 import 'package:pinput/pinput.dart';
@@ -19,8 +20,10 @@ class LoginPage extends StatefulWidget {
 
 class _LoginPageState extends State<LoginPage> {
   TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
 
   bool otpPage = false;
+  bool signUpPage = false;
   String? selectedCafe;
   List cafe = [];
 
@@ -29,14 +32,20 @@ class _LoginPageState extends State<LoginPage> {
       toastMessage(
           context: context, label: 'Enter Phone Number!', isSuccess: false);
     } else if (phoneNumberController.text != '0123456789') {
-      // toastMessage(context: context, label: 'No user found!', isSuccess: false);
-      Navigator.push(
-          context, MaterialPageRoute(builder: (context) => const SignUpPage()));
+      setState(() {
+        signUpPage = true;
+      });
     } else {
       setState(() {
         otpPage = true;
       });
     }
+  }
+  // logIn(){
+  //   Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CafeList()));
+  // }
+  signIn(){
+    Navigator.pushReplacement(context, MaterialPageRoute(builder: (context) => CafeList()));
   }
 
   @override
@@ -48,7 +57,7 @@ class _LoginPageState extends State<LoginPage> {
           leading: const SizedBox(),
           floating: false,
           pinned: false,
-          backgroundColor: ColorConst.secondaryColor,
+          backgroundColor: ColorConst.backgroundColor,
           stretch: true,
           centerTitle: true,
           expandedHeight: h * 0.2,
@@ -72,7 +81,11 @@ class _LoginPageState extends State<LoginPage> {
                         image: const AssetImage(ImageConst.logo),
                         height: h * 0.3)),
                 SizedBox(height: h * 0.03),
-                Text('Login with Mobile number', style: textStyle(false)),
+                Text(signUpPage
+                    ? 'Create an account'
+                    : otpPage
+                    ? 'Enter the OTP'
+                    : 'Login with Mobile number', style: textStyle(false)),
                 SizedBox(height: h * 0.03),
                 otpPage
                     ? const FractionallySizedBox(
@@ -84,6 +97,7 @@ class _LoginPageState extends State<LoginPage> {
                     : TextFormField(
                         controller: phoneNumberController,
                         keyboardType: TextInputType.number,
+                        readOnly: signUpPage ? true : false,
                         inputFormatters: [
                           FilteringTextInputFormatter.digitsOnly,
                         ],
@@ -109,105 +123,39 @@ class _LoginPageState extends State<LoginPage> {
                                   color: ColorConst.textColor)),
                         ),
                       ),
+                SizedBox(height: h * 0.01),
+                signUpPage
+                ? TextFormField(
+                  controller : nameController,
+                  keyboardType: TextInputType.emailAddress,
+                  style: textStyle(false),
+                  decoration: InputDecoration(
+                    hintText: 'Enter your name',
+                    border: OutlineInputBorder(
+                      borderRadius: BorderRadius.circular(w * 0.03),
+                    ),
+                    enabledBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(w * 0.03),
+                        borderSide: const BorderSide(color: ColorConst.textColor)
+                    ),
+                    focusedBorder: OutlineInputBorder(
+                        borderRadius: BorderRadius.circular(w * 0.03),
+                        borderSide: const BorderSide(color: ColorConst.textColor)
+                    ),
+                  ),
+                )
+                : const SizedBox(),
                 SizedBox(height: h * 0.03),
-                InkWell(
+                signUpPage
+                    ? GestureDetector(
                   onTap: () {
-                    if (otpPage == false) {
-                      loginIn(context);
-                    } else {
-                      showDialog(
-                        barrierDismissible: false,
-                        context: context,
-                        builder: (context) {
-                          return StatefulBuilder(
-                            builder: (context, setState) {
-                              return AlertDialog(
-                                backgroundColor: ColorConst.backgroundColor,
-                                title: Text(
-                                  'Select a cafe',
-                                  style: textStyle(true),
-                                ),
-                                content: Container(
-                                  decoration: BoxDecoration(
-                                      border: Border.all(
-                                          color: ColorConst.secondaryColor),
-                                      borderRadius:
-                                          BorderRadius.circular(w * 0.03)),
-                                  width: w * 0.7,
-                                  child: DropdownButton(
-                                    dropdownColor: ColorConst.secondaryColor,
-                                    padding: EdgeInsets.symmetric(
-                                        horizontal: w * 0.03),
-                                    hint: Text("Available Cafes",
-                                        style: textStyle(false)),
-                                    icon: Icon(
-                                      CupertinoIcons.chevron_down,
-                                      size: w * 0.04,
-                                    ),
-                                    isExpanded: true,
-                                    underline: const SizedBox(),
-                                    style: textStyle(false),
-                                    value: selectedCafe,
-                                    items: gamingCafe.map((valueItem) {
-                                      return DropdownMenuItem(
-                                        value: valueItem.keys.first,
-                                        child: Text(valueItem.keys.first),
-                                      );
-                                    }).toList(),
-                                    onChanged: (newValue) {
-                                      setState(() {
-                                        cafe = [];
-                                        selectedCafe = newValue.toString();
-                                        selectedCafe == gamingCafe[0].keys.first
-                                            ? cafe.add(gamingCafe[0])
-                                            : cafe.add(gamingCafe[1]);
-                                      });
-                                    },
-                                  ),
-                                ),
-                                actions: [
-                                  TextButton(
-                                      onPressed: () => Navigator.pop(context),
-                                      child: const Text('Cancel')),
-                                  TextButton(
-                                      onPressed: () async {
-                                        if (selectedCafe == null) {
-                                          toastMessage(
-                                              context: context,
-                                              label: 'Please select a cafe!',
-                                              isSuccess: false);
-                                        } else {
-                                          SharedPreferences prefs =
-                                              await SharedPreferences
-                                                  .getInstance();
-                                          prefs.setBool('isLoggedIn', true);
-                                          prefs.setString('selectedCafe',
-                                              selectedCafe.toString());
-                                          String jsonString = jsonEncode(cafe);
-                                          prefs.setString('cafe', jsonString);
-                                          toastMessage(
-                                              context: context,
-                                              label: 'Logged in Successfully!',
-                                              isSuccess: true);
-                                          Navigator.push(
-                                              context,
-                                              MaterialPageRoute(
-                                                  builder: (context) =>
-                                                      HomePage(
-                                                        cafe: cafe,
-                                                        selectedCafe:
-                                                            selectedCafe
-                                                                .toString(),
-                                                      )));
-                                        }
-                                      },
-                                      child: const Text('Ok')),
-                                ],
-                              );
-                            },
-                          );
-                        },
-                      );
+                    if(nameController.text.isEmpty){
+                      toastMessage(context: context, label: 'Please enter your Name!', isSuccess: false);
+                    }else{
+                      setState(() {
+                        otpPage = true;
+                        signUpPage = false;
+                      });
                     }
                   },
                   child: Container(
@@ -217,17 +165,65 @@ class _LoginPageState extends State<LoginPage> {
                           color: ColorConst.buttons,
                           borderRadius: BorderRadius.circular(w * 0.1)),
                       child: Center(
-                          child: Text(otpPage ? 'Verify' : 'Send OTP',
+                          child: Text('Send OTP',
+                              style: textStyle(false)))),
+                )
+                    : otpPage
+                    ? GestureDetector(
+                  onTap: () async {
+                    SharedPreferences prefs =
+                        await SharedPreferences
+                        .getInstance();
+                    prefs.setBool('isLoggedIn', true);
+                    toastMessage(
+                        context: context,
+                        label: 'Logged in Successfully!',
+                        isSuccess: true);
+                    Navigator.push(context, MaterialPageRoute(builder: (context) => CafeList()));
+                  },
+                  child: Container(
+                      width: w * 0.3,
+                      height: h * 0.05,
+                      decoration: BoxDecoration(
+                          color: ColorConst.buttons,
+                          borderRadius: BorderRadius.circular(w * 0.1)),
+                      child: Center(
+                          child: Text('Verify',
+                              style: textStyle(false)))),
+                )
+                    : GestureDetector(
+                  onTap: () {
+                    if(phoneNumberController.text.isEmpty){
+                      toastMessage(context: context, label: 'Please enter your Mobile number!', isSuccess: false);
+                    }else if(phoneNumberController.text != '0123456789'){
+                      setState(() {
+                        signUpPage = true;
+                      });
+                    }else{
+                      setState(() {
+                        otpPage = true;
+                      });
+                    }
+                  },
+                  child: Container(
+                      width: w * 0.3,
+                      height: h * 0.05,
+                      decoration: BoxDecoration(
+                          color: ColorConst.buttons,
+                          borderRadius: BorderRadius.circular(w * 0.1)),
+                      child: Center(
+                          child: Text('Send OTP',
                               style: textStyle(false)))),
                 ),
                 const SizedBox(
                   height: 20,
                 ),
-                otpPage
+                otpPage || signUpPage
                     ? GestureDetector(
                         onTap: () {
                           setState(() {
                             otpPage = false;
+                            signUpPage = false;
                           });
                         },
                         child: Row(
