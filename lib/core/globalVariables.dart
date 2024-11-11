@@ -72,7 +72,7 @@ List gamingCafe = [
         'PC Gaming' : [
           {'name' : 'PC 1', 'price' : 120, 'status' : false},
           {'name' : 'PC 2', 'price' : 120, 'status' : true},
-          {'name' : 'PC 3', 'price' : 120, 'status' : false},
+          {'name' : 'PC 3', 'price' : 120, 'status' : true},
           {'name' : 'PC 4', 'price' : 120, 'status' : false},
           {'name' : 'PC 5', 'price' : 120, 'status' : false},
           {'name' : 'PC 6', 'price' : 120, 'status' : false},
