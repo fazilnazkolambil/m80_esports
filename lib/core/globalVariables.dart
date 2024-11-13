@@ -9,6 +9,10 @@ var h;
 String selectedCafe = '';
 List cafe = [];
 
+/// API
+final api = 'https://admnaj65zk.execute-api.ap-south-1.amazonaws.com/Prod';
+final apiKey = 'gqaVtRdX5jfIa844tqf12F9deUr0v6maaR4vX3F7';
+
 /// TEXT STYLE
 TextStyle textStyle (bool heading) {
   return TextStyle(
@@ -109,7 +113,7 @@ List gamingCafe = [
     ]
   },
   {
-    'Bell Road' : [
+    'Bel Road' : [
       {
         'PC Gaming' : [
           {'name' : 'PC 1', 'price' : 120, 'status' : false},

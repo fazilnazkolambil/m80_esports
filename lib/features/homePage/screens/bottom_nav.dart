@@ -11,6 +11,8 @@ import 'package:shared_preferences/shared_preferences.dart';
 import '../../../core/globalVariables.dart';
 import '../../authPage/screens/login_page.dart';
 
+final ScrollController scrollController = ScrollController();
+
 class BottomNavBar extends StatefulWidget {
   const BottomNavBar({Key? key}) : super(key: key);
 
@@ -112,6 +114,7 @@ class _MyHomePageState extends State<BottomNavBar> {
         ),
       ),
       body: CustomScrollView(
+        controller: scrollController,
         slivers: [
           SliverAppBar(
             leading: Builder(
@@ -162,7 +165,7 @@ class _MyHomePageState extends State<BottomNavBar> {
       bottomNavigationBar: (bottomBarPages.length <= maxCount)
           ? AnimatedNotchBottomBar(
         notchBottomBarController: _controller,
-        color: ColorConst.backgroundColor.withOpacity(0.6),
+        color: ColorConst.backgroundColor.withOpacity(0.8),
         showLabel: true,
         textOverflow: TextOverflow.visible,
         maxLine: 1,
@@ -171,7 +174,7 @@ class _MyHomePageState extends State<BottomNavBar> {
         notchColor: ColorConst.buttons.withOpacity(0.7),
         removeMargins: false,
         bottomBarWidth: w * 0.5,
-        showShadow: false,
+        showShadow: true,
         durationInMilliSeconds: 300,
         itemLabelStyle: textStyle(false),
         elevation: 1,

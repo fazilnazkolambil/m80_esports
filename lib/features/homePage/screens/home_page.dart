@@ -5,20 +5,22 @@ import 'package:m80_esports/core/globalVariables.dart';
 import 'package:m80_esports/features/authPage/screens/login_page.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import 'bottom_nav.dart';
+
 class HomePage extends StatefulWidget{
   const HomePage({super.key});
   @override
   State <HomePage> createState () => _HomePageState();
 }
 class _HomePageState extends State <HomePage>{
-  final ScrollController _scrollController = ScrollController();
+
   @override
   Widget build (BuildContext context){
     return bgAnime(widget: DefaultTabController(
       length: cafe[0][selectedCafe].length,
       child: Scaffold(
           body: CustomScrollView(
-            controller: _scrollController,
+            controller: scrollController,
             slivers: [
               SliverAppBar(
                 pinned: true,
@@ -51,7 +53,7 @@ class _HomePageState extends State <HomePage>{
                           children: List.generate(cafe[0][selectedCafe].length, (i) {
                             List setups = cafe[0][selectedCafe][i][cafe[0][selectedCafe][i].keys.first];
                             return ListView.separated(
-                                controller: _scrollController,
+                                controller: scrollController,
                                 physics: const BouncingScrollPhysics(),
                                 itemBuilder: (context, index) {
                                   return Container(
